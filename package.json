@@ -1,0 +1,15 @@
+{
+  "name": "maps-comparison",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.1.11"
+  },
+  "dependencies": {
+    "ol": "latest"
+  }
+}
