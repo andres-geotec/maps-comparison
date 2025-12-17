@@ -6,7 +6,19 @@ html, body {
   height: 100%;
 }
 
-main {
+.controls {
+  position: absolute;
+  z-index: 9;
+  top: 0;
+  left: 50%
+}
+
+.controls button {
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.maps {
   display: flex;
 }
 

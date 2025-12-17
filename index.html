@@ -10,11 +10,23 @@
   </head>
   <body>
     <main>
-      <div class="map" id="map-libre"></div>
-      <div class="map" id="map-ol"></div>
+      <div class="controls">
+        <button id="⬆️">⬆️</button>
+        <button id="⬇️">⬇️</button>
+        <button id="⬅️">⬅️</button>
+        <button id="➡️">➡️</button>
+        <button id="➕">➕</button>
+        <button id="➖">➖</button>
+      </div>
+
+      <div class="maps">
+        <div class="map" id="map-libre"></div>
+        <div class="map" id="map-ol"></div>
+      </div>
     </main>
 
     <script type="module" src="./ol.js"></script>
     <script type="module" src="./map-libre.js"></script>
+    <script type="module" src="./controls.js"></script>
   </body>
 </html>

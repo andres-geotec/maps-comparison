@@ -30,3 +30,12 @@ libreMap.on('load', function () {
     },
   });
 });
+
+export default {
+  view: () => {
+    libreMap.setCenter({
+      lng: libreMap.getCenter().lng,
+      lat: libreMap.getCenter().lat + 0.1,
+    });
+  },
+};

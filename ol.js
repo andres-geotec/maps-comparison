@@ -44,3 +44,12 @@ const layer = new VectorTileLayer({
   },
 });
 olMap.addLayer(layer);
+
+export default {
+  view: () => {
+    olMap.getView().setCenter([
+      olMap.getView().getCenter()[0],
+      olMap.getView().getCenter()[1] + 11800,
+    ]);
+  },
+};
