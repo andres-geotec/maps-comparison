@@ -4,10 +4,15 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="https://openlayers.org/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Using OpenLayers with Vite</title>
+    <title>Vite Maps</title>
   </head>
   <body>
-    <div id="map"></div>
-    <script type="module" src="./main.js"></script>
+    <main>
+      <div class="map" id="map-ol"></div>
+      <div class="map" id="map-libre"></div>
+    </main>
+
+    <script type="module" src="./ol.js"></script>
+    <script type="module" src="./map-libre.js"></script>
   </body>
 </html>
