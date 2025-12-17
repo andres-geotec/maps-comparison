@@ -31,11 +31,41 @@ libreMap.on('load', function () {
   });
 });
 
+const n = 0.1;
+
 export default {
-  view: () => {
+  up: () => {
     libreMap.setCenter({
       lng: libreMap.getCenter().lng,
-      lat: libreMap.getCenter().lat + 0.1,
+      lat: libreMap.getCenter().lat + n,
     });
+  },
+  down: () => {
+    libreMap.setCenter({
+      lng: libreMap.getCenter().lng,
+      lat: libreMap.getCenter().lat - n,
+    });
+  },
+  left: () => {
+    libreMap.setCenter({
+      lng: libreMap.getCenter().lng - n,
+      lat: libreMap.getCenter().lat,
+    });
+  },
+  right: () => {
+    libreMap.setCenter({
+      lng: libreMap.getCenter().lng + n,
+      lat: libreMap.getCenter().lat,
+    });
+  },
+  in: () => {
+    libreMap.setZoom(
+      libreMap.getZoom() + 1
+    );
+  },
+  out: () => {
+    libreMap.setZoom(
+      libreMap.getZoom() - 1
+    );
   },
 };

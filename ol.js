@@ -45,11 +45,41 @@ const layer = new VectorTileLayer({
 });
 olMap.addLayer(layer);
 
+const n = 11800;
+
 export default {
-  view: () => {
+  up: () => {
     olMap.getView().setCenter([
       olMap.getView().getCenter()[0],
-      olMap.getView().getCenter()[1] + 11800,
+      olMap.getView().getCenter()[1] + n,
     ]);
+  },
+  down: () => {
+    olMap.getView().setCenter([
+      olMap.getView().getCenter()[0],
+      olMap.getView().getCenter()[1] - n,
+    ]);
+  },
+  left: () => {
+    olMap.getView().setCenter([
+      olMap.getView().getCenter()[0] - n,
+      olMap.getView().getCenter()[1],
+    ]);
+  },
+  right: () => {
+    olMap.getView().setCenter([
+      olMap.getView().getCenter()[0] + n,
+      olMap.getView().getCenter()[1],
+    ]);
+  },
+  in: () => {
+    olMap.getView().setZoom(
+      olMap.getView().getZoom() + 1
+    );
+  },
+  out: () => {
+    olMap.getView().setZoom(
+      olMap.getView().getZoom() + 1
+    );
   },
 };
