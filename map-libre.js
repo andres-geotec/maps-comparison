@@ -8,4 +8,5 @@ const libreMap = new Map({
   style: 'https://tiles.openfreemap.org/styles/bright', // style URL
   center: getCenter(), // starting position [lng, lat]
   zoom: zoom-1.08, // starting zoom
+  interactive: false,
 });

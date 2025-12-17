@@ -2,7 +2,8 @@ import './style.css';
 import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import { getCenter, zoom } from "./main.js";
+import { getCenter, zoom } from './main.js';
+// import { defaults as interactionsDefaults } from 'ol/interaction';
 
 const olMap = new Map({
   target: 'map-ol',
@@ -14,7 +15,8 @@ const olMap = new Map({
   view: new View({
     center: getCenter(),
     zoom: zoom,
-    // extent: [-118.3651,14.5321,-86.7104,32.7187],
     projection: 'EPSG:4326'
-  })
+  }),
+  controls: [],
+  interactions: [],
 });
