@@ -5,7 +5,7 @@ const libreMap = new Map({
   container: 'map-libre',
   style: 'https://tiles.openfreemap.org/styles/bright',
   center: getCenter(),
-  zoom: zoom-1.09,
+  zoom: zoom-1,
   interactive: false,
 });
 
