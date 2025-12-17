@@ -1,11 +1,32 @@
 import { Map } from 'maplibre-gl';
-import { getCenter, zoom } from "./main.js";
+import { url_capa, getCenter, zoom } from "./main.js";
 
 const libreMap = new Map({
-  container: 'map-libre', // container id
-  // style: 'https://demotiles.maplibre.org/globe.json', // style URL
-  style: 'https://tiles.openfreemap.org/styles/bright', // style URL
-  center: getCenter(), // starting position [lng, lat]
-  zoom: zoom-1.08, // starting zoom
+  container: 'map-libre',
+  style: 'https://tiles.openfreemap.org/styles/bright',
+  center: getCenter(),
+  zoom: zoom-1.09,
   interactive: false,
+});
+
+libreMap.on('load', function () {
+  libreMap.addSource('martin-service', {
+    'type': 'vector',
+    'tiles': [
+      url_capa
+    ],
+  });
+
+  libreMap.addLayer({
+    'id': 'nombre-de-mi-capa-poligonos',
+    'type': 'fill',
+    'source': 'martin-service',
+    'source-layer': 'catastro_cdmx',
+    'layout': {},
+    'paint': {
+      'fill-color': '#0080ff',
+      // 'fill-opacity': 0.5,
+      'fill-outline-color': '#000000',
+    },
+  });
 });

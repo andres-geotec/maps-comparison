@@ -1,6 +1,8 @@
+export const url_capa = 'http://localhost:3000/catastro_cdmx/{z}/{x}/{y}';
+
 const extent = [-99.3564282805277514,19.0486218337350977,-98.9393818152620241,19.5926289308868782]
 
-export const zoom = 12;
+export const zoom = 11.2;
 
 export function getCenter() {
   return [
