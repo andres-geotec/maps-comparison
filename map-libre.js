@@ -1,4 +1,3 @@
-import 'maplibre-gl/dist/maplibre-gl.css';
 import { Map } from 'maplibre-gl';
 import { getCenter, zoom } from "./main.js";
 
