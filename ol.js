@@ -1,13 +1,17 @@
 import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import { fromLonLat } from 'ol/proj.js';
-// import { defaults as interactionsDefaults } from 'ol/interaction';
-import VectorTileLayer from 'ol/layer/VectorTile.js';
-import VectorTileSource from 'ol/source/VectorTile.js';
-import MVT from 'ol/format/MVT.js';
-import { url_capa, getCenter, zoom } from './main.js';
+import { fromLonLat, toLonLat } from 'ol/proj';
+import VectorTileLayer from 'ol/layer/VectorTile';
+import VectorTileSource from 'ol/source/VectorTile';
+import MVT from 'ol/format/MVT';
+import { url_capa, center, zoom } from './main.js';
+import * as libreMap from './map-libre.js';
 
+const olView = new View({
+  center: fromLonLat(center, 'EPSG:3857'),
+  zoom: zoom,
+});
 
 const olMap = new Map({
   target: 'map-ol',
@@ -16,14 +20,8 @@ const olMap = new Map({
       source: new OSM()
     })
   ],
-  view: new View({
-    // center: getCenter(),
-    center: fromLonLat(getCenter(), 'EPSG:3857'),
-    zoom: zoom,
-    // projection: 'EPSG:4326',
-  }),
+  view: olView,
   controls: [],
-  interactions: [],
 });
 
 const layer = new VectorTileLayer({
@@ -45,41 +43,55 @@ const layer = new VectorTileLayer({
 });
 olMap.addLayer(layer);
 
-const n = 11800;
+// let isSyncing = false
+olView.on('change:center', () => libreMap.setCenter(toLonLat(olView.getCenter())));
+olView.on('change:resolution', () => {
+  // console.log('change:resolution', olView.getZoom());
+  libreMap.setZoom(olView.getZoom());
+});
+// olView.on('change:rotation', movimiento);
 
-export default {
-  up: () => {
-    olMap.getView().setCenter([
-      olMap.getView().getCenter()[0],
-      olMap.getView().getCenter()[1] + n,
-    ]);
-  },
-  down: () => {
-    olMap.getView().setCenter([
-      olMap.getView().getCenter()[0],
-      olMap.getView().getCenter()[1] - n,
-    ]);
-  },
-  left: () => {
-    olMap.getView().setCenter([
-      olMap.getView().getCenter()[0] - n,
-      olMap.getView().getCenter()[1],
-    ]);
-  },
-  right: () => {
-    olMap.getView().setCenter([
-      olMap.getView().getCenter()[0] + n,
-      olMap.getView().getCenter()[1],
-    ]);
-  },
-  in: () => {
-    olMap.getView().setZoom(
-      olMap.getView().getZoom() + 1
-    );
-  },
-  out: () => {
-    olMap.getView().setZoom(
-      olMap.getView().getZoom() + 1
-    );
-  },
-};
+export function setCenter(newCenter) {
+  olView.setCenter(fromLonLat(newCenter));
+}
+export function setZoom(newZoom) {
+  olView.setZoom(newZoom);
+}
+
+// const n = 11800;
+// export default {
+//   up: () => {
+//     olMap.getView().setCenter([
+//       olMap.getView().getCenter()[0],
+//       olMap.getView().getCenter()[1] + n,
+//     ]);
+//   },
+//   down: () => {
+//     olMap.getView().setCenter([
+//       olMap.getView().getCenter()[0],
+//       olMap.getView().getCenter()[1] - n,
+//     ]);
+//   },
+//   left: () => {
+//     olMap.getView().setCenter([
+//       olMap.getView().getCenter()[0] - n,
+//       olMap.getView().getCenter()[1],
+//     ]);
+//   },
+//   right: () => {
+//     olMap.getView().setCenter([
+//       olMap.getView().getCenter()[0] + n,
+//       olMap.getView().getCenter()[1],
+//     ]);
+//   },
+//   in: () => {
+//     olMap.getView().setZoom(
+//       olMap.getView().getZoom() + 1
+//     );
+//   },
+//   out: () => {
+//     olMap.getView().setZoom(
+//       olMap.getView().getZoom() - 1
+//     );
+//   },
+// };
