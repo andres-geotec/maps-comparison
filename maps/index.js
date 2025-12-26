@@ -1,8 +1,8 @@
-import { OpenLayers } from "./ol";
-import { MapLibre } from "./map-libre";
-import { fromLonLat } from 'ol/proj';
+import { OpenLayers } from './ol'
+import { MapLibre } from './map-libre'
+import { Leaflet } from './leaflet'
 
-export const url_capa = 'http://localhost:3000/catastro_cdmx/{z}/{x}/{y}'
+export const url_capa = 'http://localhost:3000/catastro_cdmx'
 
 const extent = [-99.3564282805277514,19.0486218337350977,-98.9393818152620241,19.5926289308868782]
 export function getCenter() {
@@ -12,7 +12,7 @@ export function getCenter() {
   ]
 }
 // export const center = [-99.14790504789488, 19.320625382310986]
-export const center = getCenter()
+// export const center = getCenter()
 export const zoom = 11.2
 
 export class Mapas {
@@ -35,18 +35,21 @@ export class Mapas {
 let isSyncing = false
 let timeSyncing = 1
 
-const mapLibre = new MapLibre(center, zoom, ({ center, zoom }) => {
+const mapLibre = new MapLibre(getCenter(), zoom, url_capa, ({ center, zoom }) => {
   if (isSyncing) return
   isSyncing = true
 
   // console.log('moviendo', center, zoom);
-  openLayers.getView().setCenter(fromLonLat(center, 'EPSG:3857'))
-  openLayers.getView().setZoom(zoom+1)
+  openLayers.setCenter(center)
+  openLayers.setZoom(zoom+1)
+
+  leaflet.setCenter(center)
+  leaflet.setZoom(zoom+1)
 
   setTimeout(() => (isSyncing = false), timeSyncing)
 })
 
-const openLayers = new OpenLayers(center, zoom, ({ center, zoom }) => {
+const openLayers = new OpenLayers(getCenter(), zoom, url_capa, ({ center, zoom }) => {
   if (isSyncing) return
   isSyncing = true
 
@@ -54,7 +57,22 @@ const openLayers = new OpenLayers(center, zoom, ({ center, zoom }) => {
   mapLibre.setCenter(center)
   mapLibre.setZoom(zoom-1)
 
+  leaflet.setCenter(center)
+  leaflet.setZoom(zoom)
+
   setTimeout(() => (isSyncing = false), timeSyncing)
 })
 
+const leaflet = new Leaflet(getCenter(), zoom, url_capa, ({ center, zoom }) => {
+  if (isSyncing) return
+  isSyncing = true
 
+  // console.log('moviendo', center, zoom);
+  openLayers.setCenter(center)
+  openLayers.setZoom(zoom)
+
+  mapLibre.setCenter(center)
+  mapLibre.setZoom(zoom-1)
+
+  setTimeout(() => (isSyncing = false), timeSyncing)
+})

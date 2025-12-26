@@ -1,5 +1,6 @@
-@import 'node_modules/ol/ol.css';
+@import 'ol/ol.css';
 @import 'maplibre-gl/dist/maplibre-gl.css';
+@import 'leaflet/dist/leaflet.css';
 
 html, body {
   margin: 0;
@@ -23,8 +24,8 @@ html, body {
 }
 
 .map {
-  width: 50%;
-  height: 100vh;
+  min-width: 50%;
+  min-height: 50vh;
 }
 
 /* #map-ol {} */
