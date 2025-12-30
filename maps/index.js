@@ -1,6 +1,6 @@
-import { OpenLayers } from './ol'
-import { MapLibre } from './map-libre'
-import { Leaflet } from './leaflet'
+import { MapLibre, name as nameMaplibre } from './map-libre'
+import { OpenLayers, name as nameOl } from './ol'
+import { Leaflet, name as nameLeaflet } from './leaflet'
 
 export const url_capa = 'http://localhost:3000/catastro_cdmx'
 
@@ -15,64 +15,30 @@ export function getCenter() {
 // export const center = getCenter()
 export const zoom = 11.2
 
-export class Mapas {
-  constructor() {
-    this.isSyncing = false
-    this.leaflet = {}
-    this.mapLibre = {}
-    // this.olView = initMap(center, zoom)
-  }
-
-  changeFromLeaflet() {}
-
-  changeFromMapLibre() {}
-
-  changeFromOl() {}
-}
-
-// new Mapas()
+const mapLibre = new MapLibre(getCenter(), zoom, url_capa, changeViews)
+const openLayers = new OpenLayers(getCenter(), zoom, url_capa, changeViews)
+// const leaflet = new Leaflet(getCenter(), zoom, url_capa, changeViews)
 
 let isSyncing = false
 let timeSyncing = 1
-
-const mapLibre = new MapLibre(getCenter(), zoom, url_capa, ({ center, zoom }) => {
+function changeViews({ center, zoom, from }) {
   if (isSyncing) return
   isSyncing = true
 
-  // console.log('moviendo', center, zoom);
-  openLayers.setCenter(center)
-  openLayers.setZoom(zoom+1)
+  if (from !== nameMaplibre) {
+    mapLibre.setCenter(center)
+    mapLibre.setZoom(zoom - 1)
+  }
 
-  leaflet.setCenter(center)
-  leaflet.setZoom(zoom+1)
+  if (from !== nameOl) {
+    openLayers.setCenter(center)
+    openLayers.setZoom(zoom)
+  }
 
-  setTimeout(() => (isSyncing = false), timeSyncing)
-})
-
-const openLayers = new OpenLayers(getCenter(), zoom, url_capa, ({ center, zoom }) => {
-  if (isSyncing) return
-  isSyncing = true
-
-  // console.log('moviendo', center, zoom);
-  mapLibre.setCenter(center)
-  mapLibre.setZoom(zoom-1)
-
-  leaflet.setCenter(center)
-  leaflet.setZoom(zoom)
+  // if (from !== nameLeaflet) {
+  //   leaflet.setCenter(center)
+  //   leaflet.setZoom(zoom)
+  // }
 
   setTimeout(() => (isSyncing = false), timeSyncing)
-})
-
-const leaflet = new Leaflet(getCenter(), zoom, url_capa, ({ center, zoom }) => {
-  if (isSyncing) return
-  isSyncing = true
-
-  // console.log('moviendo', center, zoom);
-  openLayers.setCenter(center)
-  openLayers.setZoom(zoom)
-
-  mapLibre.setCenter(center)
-  mapLibre.setZoom(zoom-1)
-
-  setTimeout(() => (isSyncing = false), timeSyncing)
-})
+}

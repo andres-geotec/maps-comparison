@@ -6,6 +6,8 @@ import VectorTileLayer from 'ol/layer/VectorTile';
 import VectorTileSource from 'ol/source/VectorTile';
 import MVT from 'ol/format/MVT';
 
+export const name = 'openlayers'
+
 export class OpenLayers extends Map {
   constructor(center, zoom, url_capa, move) {
     const olView = new View({
@@ -17,6 +19,7 @@ export class OpenLayers extends Map {
       move({
         center: toLonLat(target.getCenter(), 'EPSG:3857'),
         zoom: target.getZoom(),
+        from: name,
       })
     }
 

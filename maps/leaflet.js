@@ -1,6 +1,8 @@
 import L from 'leaflet'
 import 'leaflet.vectorgrid'
 
+export const name = 'leaflet'
+
 export class Leaflet {
   constructor(center, zoom, url_capa, move) {
     this.map = L.map('map-leaflet', {
@@ -29,6 +31,7 @@ export class Leaflet {
       move({
         center: [lng, lat],
         zoom: target.getZoom(),
+        from: name,
       })
     }
 
@@ -36,7 +39,7 @@ export class Leaflet {
   }
   
   setCenter(center) {
-    // console.log(center);
+    // console.log(this.map.setView, center, L.latLng);
     
     // this.map.setView(L.latLng(center[1], center[0]))
     // this.map.setView(center)

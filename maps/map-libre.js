@@ -1,5 +1,7 @@
 import { Map } from 'maplibre-gl';
 
+export const name = 'maplibre'
+
 export class MapLibre extends Map {
   constructor(center, zoom, url_capa, move) {
     super({
@@ -56,7 +58,8 @@ export class MapLibre extends Map {
       const { lng, lat } = target.getCenter()
       move({
         center: [lng, lat],
-        zoom: target.getZoom(),
+        zoom: target.getZoom() + 1,
+        from: name,
       })
     }
 
