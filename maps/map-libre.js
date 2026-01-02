@@ -1,11 +1,58 @@
 import { Map } from 'maplibre-gl';
 
-export const name = 'maplibre'
-
 export class MapLibre extends Map {
-  constructor(center, zoom, url_capa, move) {
+  constructor(type, center, zoom, capa, move) {
+    const container = `maplibre-${type}`
+
+    const source = {}    
+    const layers = []
+
+    if (type === 'mvt') {
+      source['catastro'] = {
+        type: 'vector',
+        url: capa,
+      }
+      layers.push({
+        id: 'catastro-fill',
+        type: 'fill',
+        source: 'catastro',
+        'source-layer': 'catastro_cdmx',
+        paint: {
+          'fill-color': '#ffffff',
+          'fill-opacity': 0.4,
+        },
+      })
+      layers.push({
+        id: 'catastro-line',
+        type: 'line',
+        source: 'catastro',
+        'source-layer': 'catastro_cdmx',
+        paint: {
+          'line-color': '#3399CC',
+          'line-width': 1.25,
+        },
+      })
+    }
+    if (type === 'wms') {
+      source['wms-test-source'] = {
+        type: 'raster',
+        // use the tiles option to specify a WMS tile source URL
+        // https://maplibre.org/maplibre-style-spec/sources/
+        tiles: [
+          `https://geonode.dev.geoint.mx/geoserver/ows?service=WMS&request=GetMap&version=1.1.1&layers=${capa}&styles=&format=image%2Fpng&transparent=true&info_format=text%2Fhtml&tiled=false&srs=EPSG:3857&bbox={bbox-epsg-3857}&width=256&height=256`
+        ],
+        tileSize: 256
+      }
+      layers.push({
+        id: 'wms-test-layer',
+        type: 'raster',
+        source: 'wms-test-source',
+        paint: {},
+      })
+    }
+
     super({
-      container: 'map-libre',
+      container,
       style: {
         version: 8,
         sources: {
@@ -17,10 +64,7 @@ export class MapLibre extends Map {
             tileSize: 256,
             attribution: '© OpenStreetMap contributors',
           },
-          catastro: {
-            type: 'vector',
-            url: url_capa,
-          },
+          ...source,
         },
         layers: [
           {
@@ -28,26 +72,7 @@ export class MapLibre extends Map {
             type: 'raster',
             source: 'osm',
           },
-          {
-            id: 'catastro-fill',
-            type: 'fill',
-            source: 'catastro',
-            'source-layer': 'catastro_cdmx',
-            paint: {
-              'fill-color': '#ffffff',
-              'fill-opacity': 0.4
-            }
-          },
-          {
-            id: 'catastro-line',
-            type: 'line',
-            source: 'catastro',
-            'source-layer': 'catastro_cdmx',
-            paint: {
-              'line-color': '#3399CC',
-              'line-width': 1.25
-            }
-          }
+          ...layers,
         ],
       },
       center: center,
@@ -59,9 +84,11 @@ export class MapLibre extends Map {
       move({
         center: [lng, lat],
         zoom: target.getZoom() + 1,
-        from: name,
+        from: container,
       })
     }
+
+    this.id = container
 
     this.on('move', changeView)
     this.on('zoom', changeView)

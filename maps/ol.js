@@ -1,47 +1,64 @@
-import { Map, View } from 'ol';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
-import { fromLonLat, toLonLat } from 'ol/proj';
-import VectorTileLayer from 'ol/layer/VectorTile';
-import VectorTileSource from 'ol/source/VectorTile';
-import MVT from 'ol/format/MVT';
-
-export const name = 'openlayers'
+import { Map, View } from 'ol'
+import TileLayer from 'ol/layer/Tile'
+import OSM from 'ol/source/OSM'
+import { fromLonLat, toLonLat } from 'ol/proj'
+import VectorTileLayer from 'ol/layer/VectorTile'
+import VectorTileSource from 'ol/source/VectorTile'
+import MVT from 'ol/format/MVT'
+import { TileWMS } from 'ol/source'
 
 export class OpenLayers extends Map {
-  constructor(center, zoom, url_capa, move) {
+  constructor(type, center, zoom, capa, move) {
+    const container = `openlayers-${type}`
+
     const olView = new View({
       center: fromLonLat(center, 'EPSG:3857'),
       zoom: zoom,
     })
 
-    function changeView({ target }) {
-      move({
-        center: toLonLat(target.getCenter(), 'EPSG:3857'),
-        zoom: target.getZoom(),
-        from: name,
-      })
-    }
+    const changeView = ({ target }) => move({
+      center: toLonLat(target.getCenter(), 'EPSG:3857'),
+      zoom: target.getZoom(),
+      from: container,
+    })
 
     olView.on('change:center', changeView)
     olView.on('change:resolution', changeView)
     // olView.on('change:rotation', changeView)
 
+    let layer
+    if (type === 'mvt') {
+      layer = new VectorTileLayer({
+        declutter: true,
+        source: new VectorTileSource({
+          format: new MVT(),
+          url: `${capa}/{z}/{x}/{y}`,
+        }),
+      })
+    }
+    if (type === 'wms') {
+      layer = new TileLayer({
+        source: new TileWMS({
+          url: 'https://geonode.dev.geoint.mx/geoserver/ows',
+          params: {
+            LAYERS: capa,
+            TILED: true,
+          },
+        }),
+      })
+    }
+
     super({
-      target: 'map-ol',
+      target: container,
+      view: olView  ,
       layers: [
         new TileLayer({ source: new OSM() }),
-        new VectorTileLayer({
-          declutter: true,
-          source: new VectorTileSource({
-            format: new MVT(),
-            url: `${url_capa}/{z}/{x}/{y}`,
-          }),
-        }),
+        layer,
       ],
-      view: olView,
       controls: [],
     })
+
+    this.id = container
   }
 
   setCenter(center) {
