@@ -1,10 +1,8 @@
 import { MapLibre } from './map-libre'
 import { OpenLayers } from './ol'
 
-export const fuente = 'http://localhost:3000'
-
-export const capa_mvt = 'http://localhost:3000/catastro_cdmx'
-export const capa_wms = 'geonode:vivi_iter_hogares_censales_20_loc_p'
+export const capa_mvt = 'catastro_cdmx'
+export const capa_wms = 'catastro_cdmx'
 
 const extent = [-99.3564282805277514,19.0486218337350977,-98.9393818152620241,19.5926289308868782]
 export function getCenter() {

@@ -1,4 +1,5 @@
-import { Map } from 'maplibre-gl';
+import { Map } from 'maplibre-gl'
+import { url_geoserver, url_martin } from "./config"
 
 export class MapLibre extends Map {
   constructor(type, center, zoom, capa, move) {
@@ -10,7 +11,7 @@ export class MapLibre extends Map {
     if (type === 'mvt') {
       source['catastro'] = {
         type: 'vector',
-        url: capa,
+        url: `${url_martin}/${capa}`,
       }
       layers.push({
         id: 'catastro-fill',
@@ -39,7 +40,7 @@ export class MapLibre extends Map {
         // use the tiles option to specify a WMS tile source URL
         // https://maplibre.org/maplibre-style-spec/sources/
         tiles: [
-          `https://geonode.dev.geoint.mx/geoserver/ows?service=WMS&request=GetMap&version=1.1.1&layers=${capa}&styles=&format=image%2Fpng&transparent=true&info_format=text%2Fhtml&tiled=false&srs=EPSG:3857&bbox={bbox-epsg-3857}&width=256&height=256`
+          `${url_geoserver}/ows?service=WMS&request=GetMap&version=1.1.1&layers=${capa}&styles=&format=image%2Fpng&transparent=true&info_format=text%2Fhtml&tiled=false&srs=EPSG:3857&bbox={bbox-epsg-3857}&width=256&height=256`
         ],
         tileSize: 256
       }

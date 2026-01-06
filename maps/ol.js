@@ -6,6 +6,7 @@ import VectorTileLayer from 'ol/layer/VectorTile'
 import VectorTileSource from 'ol/source/VectorTile'
 import MVT from 'ol/format/MVT'
 import { TileWMS } from 'ol/source'
+import { url_geoserver, url_martin } from "./config"
 
 export class OpenLayers extends Map {
   constructor(type, center, zoom, capa, move) {
@@ -32,14 +33,14 @@ export class OpenLayers extends Map {
         declutter: true,
         source: new VectorTileSource({
           format: new MVT(),
-          url: `${capa}/{z}/{x}/{y}`,
+          url: `${url_martin}/${capa}/{z}/{x}/{y}`,
         }),
       })
     }
     if (type === 'wms') {
       layer = new TileLayer({
         source: new TileWMS({
-          url: 'https://geonode.dev.geoint.mx/geoserver/ows',
+          url: `${url_geoserver}/ows`,
           params: {
             LAYERS: capa,
             TILED: true,
